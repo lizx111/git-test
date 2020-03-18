@@ -1,0 +1,105 @@
+debug: true
+server:
+  port: 9100
+  error.path: /error
+  servlet:
+    context-path: /sys-api
+  tomcat:
+    uri-encoding: utf-8
+    max-threads: 500
+spring:
+  datasource:
+    url: jdbc:mysql://10.1.235.117:3307/sbms?useUnicode=true&characterEncoding=utf8
+    username: umobile
+    password: umobile
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    druid:
+      initial-size: 8
+      min-idle: 8
+      max-active: 50
+      max-wait: 60000
+      time-between-eviction-runsMillis: 60000
+      min-evictable-idle-timeMillis: 300000
+      validation-query: select 'x' FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-open-prepared-statements: 20
+      max-pool-prepared-statement-per-connection-size: 20
+      filters: stat
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      use-global-data-source-stat: true
+  session:
+    store-type: redis
+    redis:
+      flush-mode: ON_SAVE
+      namespace: spring:session
+      configure-action: notify_keyspace_events
+    timeout: 1800
+  redis:
+    host: 136.64.210.68
+    port: 6379
+    password: Te2k_0938
+    database: 7
+    lettuce:
+      pool:
+        min-idle: 0
+        max-wait: -1ms
+        max-idle: 8
+        max-active: 8
+mybatis-plus:
+  mapper-locations:
+    classpath: /mapper/*.xml
+  type-aliases-package: com.eagle.sys.model
+  global-config:
+    db-config:
+      id-type: input
+    #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+    field-strategy: 2
+eagle:
+  cache:
+    redis:
+      enableCluster: false
+      host: 136.64.210.68
+      port: 6379
+      password: Te2k_0938
+      database: 7
+  web:
+    #静态资源配置
+    static-path-pattern-locations:
+      - /**,classpath:/static/
+    error:
+      not-found-path: /404
+      internal-server-error-path: /500
+    cors:
+      enabled: true
+      mapping: /*
+      headers:
+        - '*'
+      methods:
+        - GET
+        - HEAD
+        - POST
+        - PUT
+        - DELETE
+        - OPTIONS
+      origins:
+        - '*'
+      credentials: false
+      maxAge: 1800
+  security:
+    auth:
+      username-parameter: userName
+      password-parameter: password
+      logoutUrl: /auth/logout
+      loginUrl: /auth/login
+      loginType: 1
+    permission:
+      ignore-urls:
+        - /staff/qryStaffName
+        - /staff/qryStaffIdByCode
+        - /busiobjattrvalue/qryAttrValueName
+        - /roles/qryRoleId
+        - /smsendinfo/getMsgContent
+        - /staff/saveZwStaff
